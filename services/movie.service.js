@@ -26,4 +26,34 @@ const getMovieById = async(id)=>{
     }
 }
 
-module.exports = {getMovieById}
+const createMovie = async(data)=>{
+    const movie = await movieModel.create(data);
+    return movie
+}
+
+const deleteMovie = async(id)=>{
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return {
+            err: "Invalid ID format provided",
+            code: 400
+        };
+    }
+
+    try {
+        const response = await movieModel.deleteOne({ _id: id });
+        if (response.deletedCount === 0) {
+            return {
+                err: "No movie found for the corresponding id provided to delete",
+                code: 404
+            };
+        }
+        return response;
+    } catch (error) {
+        return {
+            err: error.message,
+            code: 500
+        };
+    }
+}
+
+module.exports = {getMovieById,createMovie,deleteMovie}
