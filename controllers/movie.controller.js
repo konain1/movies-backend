@@ -96,4 +96,31 @@ const deleteMovie = async (req, res) => {
     }
 }
 
-module.exports = { createMovie, getMovies, getMovie, deleteMovie }
+const updateMovie = async (req, res) => {
+    try {
+        const response = await movieService.updateMovie(req.params.id, req.body);
+
+        if (response && response.err) {
+            return res.status(response.code).json({
+                ...ErrResponseBody,
+                err: response.err,
+                message: response.err
+            });
+        }
+
+        return res.status(200).json({
+            ...SuccessResponseBody,
+            data: response,
+            message: "successfully updated the movie"
+        });
+    } catch (error) {
+        console.error("Error updating movie:", error);
+        return res.status(500).json({
+            ...ErrResponseBody,
+            err: error.message || error,
+            message: "Something went wrong unable to update movie"
+        });
+    }
+}
+
+module.exports = { createMovie, getMovies, getMovie, deleteMovie, updateMovie }

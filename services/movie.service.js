@@ -56,4 +56,29 @@ const deleteMovie = async(id)=>{
     }
 }
 
-module.exports = {getMovieById,createMovie,deleteMovie}
+const updateMovie = async(id, data)=>{
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return {
+            err: "Invalid ID format provided",
+            code: 400
+        };
+    }
+
+    try {
+        const movie = await movieModel.findByIdAndUpdate(id, data, { new: true, runValidators: true });
+        if (!movie) {
+            return {
+                err: "No movie found for the corresponding id provided to update",
+                code: 404
+            };
+        }
+        return movie;
+    } catch (error) {
+        return {
+            err: error.message,
+            code: error.name === 'ValidationError' ? 400 : 500
+        };
+    }
+}
+
+module.exports = {getMovieById,createMovie,deleteMovie,updateMovie}
