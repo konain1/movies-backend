@@ -26,11 +26,24 @@ const createMovie = async (req, res) => {
 
 const getMovies = async (req, res) => {
     try {
-        const movies = await movieModel.find({});
+        let response;
+        if (req.query.name) {
+            response = await movieService.fetchMovie(req.query);
+            if (response && response.err) {
+                return res.status(response.code).json({
+                    ...ErrResponseBody,
+                    err: response.err,
+                    message: response.err
+                });
+            }
+        } else {
+            response = await movieModel.find({});
+        }
+
         return res.status(200).json({
             ...SuccessResponseBody,
-            data: movies,
-            message: "successfully fetched all movies"
+            data: response,
+            message: req.query.name ? "successfully fetched the movie by name" : "successfully fetched all movies"
         });
     } catch (error) {
         console.error("Error fetching movies:", error);

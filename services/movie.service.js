@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const movieModel = require('../models/movie.model')
 
-const getMovieById = async(id)=>{
+const getMovieById = async (id) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return {
             err: "Invalid ID format provided",
@@ -11,7 +11,7 @@ const getMovieById = async(id)=>{
 
     try {
         const movie = await movieModel.findById(id);
-        if(!movie){
+        if (!movie) {
             return {
                 err: "No movie found for the corresponding id provided",
                 code: 404
@@ -26,12 +26,12 @@ const getMovieById = async(id)=>{
     }
 }
 
-const createMovie = async(data)=>{
+const createMovie = async (data) => {
     const movie = await movieModel.create(data);
     return movie
 }
 
-const deleteMovie = async(id)=>{
+const deleteMovie = async (id) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return {
             err: "Invalid ID format provided",
@@ -56,7 +56,7 @@ const deleteMovie = async(id)=>{
     }
 }
 
-const updateMovie = async(id, data)=>{
+const updateMovie = async (id, data) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return {
             err: "Invalid ID format provided",
@@ -79,6 +79,37 @@ const updateMovie = async(id, data)=>{
             code: error.name === 'ValidationError' ? 400 : 500
         };
     }
+
+
 }
 
-module.exports = {getMovieById,createMovie,deleteMovie,updateMovie}
+
+const fetchMovie = async (filter) => {
+    if (!filter || !filter.name) {
+        return {
+            err: "Movie name query parameter is required",
+            code: 400
+        };
+    }
+
+    try {
+        // Using await to execute the query, and findOne to find a single movie by name
+        const movie = await movieModel.findOne({ name: filter.name });
+
+        if (!movie) {
+            return {
+                err: "Not able to find the movie",
+                code: 404
+            };
+        }
+        return movie;
+    } catch (error) {
+        return {
+            err: error.message,
+            code: 500
+        };
+    }
+}
+
+
+module.exports = { getMovieById, createMovie, deleteMovie, updateMovie , fetchMovie }
