@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const movieModel = require('../models/movie.model')
 
 const getMovieById = async (id) => {
+    id = typeof id === 'string' ? id.trim() : id;
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return {
             err: "Invalid ID format provided",
@@ -32,6 +33,7 @@ const createMovie = async (data) => {
 }
 
 const deleteMovie = async (id) => {
+    id = typeof id === 'string' ? id.trim() : id;
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return {
             err: "Invalid ID format provided",
@@ -57,6 +59,7 @@ const deleteMovie = async (id) => {
 }
 
 const updateMovie = async (id, data) => {
+    id = typeof id === 'string' ? id.trim() : id;
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return {
             err: "Invalid ID format provided",
