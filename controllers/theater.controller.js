@@ -44,44 +44,51 @@ const destroy = async (req, res) => {
 }
 const getTheater = async (req, res) => {
     try {
-        let response;
         const id = req.params.id ? req.params.id.trim() : null;
-
-        if (id && id !== '') {
-            response = await theaterService.fetchTheater(id);
-            if (response && response.err) {
-                return res.status(response.code).json({
-                    ...ErrResponseBody,
-                    err: response.err,
-                    message: response.err
-                });
-            }
-            return res.status(200).json({
-                ...SuccessResponseBody,
-                data: response,
-                message: "successfully fetch the theater"
-            });
-        } else {
-            response = await theaterService.fetchAllTheaters();
-            if (response && response.err) {
-                return res.status(response.code).json({
-                    ...ErrResponseBody,
-                    err: response.err,
-                    message: response.err
-                });
-            }
-            return res.status(200).json({
-                ...SuccessResponseBody,
-                data: response,
-                message: "successfully fetch all the theaters"
+        const response = await theaterService.fetchTheater(id);
+        if (response && response.err) {
+            return res.status(response.code).json({
+                ...ErrResponseBody,
+                err: response.err,
+                message: response.err
             });
         }
+        return res.status(200).json({
+            ...SuccessResponseBody,
+            data: response,
+            message: "successfully fetch the theater"
+        });
     } catch (error) {
         console.error("Error fetching theater", error);
         return res.status(500).json({
             ...ErrResponseBody,
             err: error.message || error,
             message: "unable to fetch theater"
+        });
+    }
+}
+
+const getTheaters = async (req, res) => {
+    try {
+        const response = await theaterService.fetchAllTheaters(req.query);
+        if (response && response.err) {
+            return res.status(response.code).json({
+                ...ErrResponseBody,
+                err: response.err,
+                message: response.err
+            });
+        }
+        return res.status(200).json({
+            ...SuccessResponseBody,
+            data: response,
+            message: "successfully fetch all the theaters"
+        });
+    } catch (error) {
+        console.error("Error fetching theaters", error);
+        return res.status(500).json({
+            ...ErrResponseBody,
+            err: error.message || error,
+            message: "unable to fetch theaters"
         });
     }
 }
@@ -110,4 +117,4 @@ const updateMovieInTheTheater = async (req,res) => {
     }
 }
 
-module.exports = { create, destroy, getTheater ,updateMovieInTheTheater}
+module.exports = { create, destroy, getTheater, getTheaters, updateMovieInTheTheater }
