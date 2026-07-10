@@ -96,7 +96,6 @@ const fetchMovie = async (filter) => {
     }
 
     try {
-        // Using await to execute the query, and findOne to find a single movie by name
         const movie = await movieModel.findOne({ name: filter.name });
 
         if (!movie) {
