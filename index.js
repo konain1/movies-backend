@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const env = require('dotenv');
 const mongoose = require('mongoose')
 const movieRoutes = require('./routes/movie.route')
+const theaterRoutes = require('./routes/theater.route')
 
 
 
@@ -19,6 +20,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 movieRoutes(app);
+theaterRoutes(app);
 
 app.get('/api/home', (req, res) => {
     res.send('Hello World!');

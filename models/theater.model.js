@@ -13,7 +13,8 @@ const theaterSchema = new mongoose.Schema({
     },
     pincode: {
         type: Number,
-        required: true
+        required: true,
+      
     },
     address: {
         type: String,
