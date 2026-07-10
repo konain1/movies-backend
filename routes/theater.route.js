@@ -6,6 +6,7 @@ const routes = (app) => {
     app.get('/mbp/api/v1/theaters', theaterController.getTheaters)
     app.delete('/mbp/api/v1/theaters/:id', theaterController.destroy)
     app.get('/mbp/api/v1/theaters/:id', theaterController.getTheater)
+    app.put('/mbp/api/v1/theaters/:id', theaterController.update)
     app.patch('/mbp/api/v1/theaters/:id/movies', validateUpdateMoviesInTheaterRequest, theaterController.updateMovieInTheTheater)
 }
 

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const theater = require('../models/theater.model');
 const { SuccessResponseBody } = require('../utils/responseBody');
+const { response } = require('express');
 
 const createTheater = async (data) => {
     try {
@@ -148,5 +149,40 @@ const updateMoviesInsideTheater = async (theaterId, movieIds, insert) => {
         throw error;
     }
 }
+const updateTheater = async (id, data) => {
+    id = typeof id === 'string' ? id.trim() : id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return {
+            err: "Invalid ID format provided",
+            code: 400
+        };
+    }
 
-module.exports = { createTheater, deleteTheater, fetchTheater, fetchAllTheaters, updateMoviesInsideTheater }
+    try {
+        const response = await theater.findByIdAndUpdate(id, data, {
+            new: true,
+            runValidators: true
+        });
+        if (!response) {
+            return {
+                err: "No theater found for the corresponding id provided to update",
+                code: 404
+            };
+        }
+        return response;
+    } catch (error) {
+        if (error.name === "ValidationError") {
+            return {
+                err: error.message,
+                code: 400
+            };
+        }
+        console.log(error);
+        return {
+            err: error.message,
+            code: 500
+        };
+    }
+}
+
+module.exports = { createTheater, deleteTheater, fetchTheater, fetchAllTheaters, updateMoviesInsideTheater, updateTheater }

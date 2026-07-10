@@ -93,28 +93,56 @@ const getTheaters = async (req, res) => {
     }
 }
 
-const updateMovieInTheTheater = async (req,res) => {
-
+const updateMovieInTheTheater = async (req, res) => {
     try {
-        const response = await theaterService.updateMoviesInsideTheater(req.params.id,req.body.movieIds,req.body.insert);
+        const response = await theaterService.updateMoviesInsideTheater(req.params.id, req.body.movieIds, req.body.insert);
 
-        if(response && response.err){
+        if (response && response.err) {
             return res.status(response.code).json({
                 ...ErrResponseBody,
-                err:response.err,
-                message:response.err
-            })
+                err: response.err,
+                message: response.err
+            });
         }
         return res.status(200).json({
             ...SuccessResponseBody,
-            data:response,
-            message:" successfull updata movies in the theatre"
-        })
-        
+            data: response,
+            message: "successfully updated movies in the theater"
+        });
     } catch (error) {
-        ErrResponseBody.err = error
-        return res.status(500).json(ErrResponseBody)
+        console.error("Error updating movies in theater:", error);
+        return res.status(500).json({
+            ...ErrResponseBody,
+            err: error.message || error,
+            message: "unable to update movies in theater"
+        });
     }
 }
 
-module.exports = { create, destroy, getTheater, getTheaters, updateMovieInTheTheater }
+const update = async (req, res) => {
+    try {
+        const response = await theaterService.updateTheater(req.params.id, req.body);
+
+        if (response && response.err) {
+            return res.status(response.code).json({
+                ...ErrResponseBody,
+                err: response.err,
+                message: response.err
+            });
+        }
+        return res.status(200).json({
+            ...SuccessResponseBody,
+            data: response,
+            message: "successfully updated theater details"
+        });
+    } catch (error) {
+        console.error("Error updating theater details:", error);
+        return res.status(500).json({
+            ...ErrResponseBody,
+            err: error.message || error,
+            message: "unable to update theater details"
+        });
+    }
+}
+
+module.exports = { create, destroy, getTheater, getTheaters, updateMovieInTheTheater, update }
