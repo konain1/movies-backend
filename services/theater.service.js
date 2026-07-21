@@ -93,7 +93,7 @@ const fetchAllTheaters = async (data) => {
             pagination.limit = data.limit
         }
         if(data && data.skip){
-            let perPage =(data.limit) ? data.limit:3
+            let perPage =(data.limit) ? data.limit : 3
             pagination.skip = data.skip*perPage
         }
 

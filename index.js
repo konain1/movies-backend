@@ -33,15 +33,7 @@ const startServer = async () => {
         await mongoose.connect(process.env.DB_URL);
         console.log('Connected to MongoDB');
 
-        // const movie = await moivesModel.create({
-        //     name: "harrypotter",
-        //     description: "magical journey of little boy from resorio",
-        //     casts: ["daniel", "emma", "snape"],
-        //     trailerUrl: "trailerurl",
-        //     releaseDate: "20-12-2025",
-        //     director: "jk rolling",
-        // });
-        // console.log('Movie created:', movie._id);
+      
 
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
