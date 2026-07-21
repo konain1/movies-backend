@@ -145,4 +145,32 @@ const update = async (req, res) => {
     }
 }
 
-module.exports = { create, destroy, getTheater, getTheaters, updateMovieInTheTheater, update }
+const findMovieOnTheater = async (req, res) => {
+    
+    try {
+        const response = await theaterService.findMovieInTheTheater(req.params.movieId)
+
+        if (response && response.err) {
+            return res.status(response.code).json({
+                ...ErrResponseBody,
+                err: response.err,
+                message:response.err
+            })
+        }
+        return res.status(200).json({
+            ...SuccessResponseBody,
+            data: response,
+            message:'Successfully fetch theaters by movie'
+        })
+        
+    } catch (error) {
+        console.log('Error finding theater by movie ', error)
+        return res.status(500).json({
+            ...ErrResponseBody,
+            err: error.message || error,
+            message:"unable to find theater by movie"
+        })
+    }
+}
+
+module.exports = { create, destroy, getTheater, getTheaters, updateMovieInTheTheater, update, findMovieOnTheater }

@@ -126,7 +126,6 @@ const updateMoviesInsideTheater = async (theaterId, movieIds, insert) => {
                 const alreadyExists = Theater.movies.some(id => id.toString() === movieId.toString());
                 if (!alreadyExists) {
                     Theater.movies.push(movieId);
-                    console.log("new added")
                 }
             });
         } else {
@@ -134,7 +133,7 @@ const updateMoviesInsideTheater = async (theaterId, movieIds, insert) => {
 
             movieIds.forEach((mId) => {
                 savedMovies = savedMovies.filter((smId) => smId.toString() !== mId.toString());
-                console.log("e")
+                console.log("deleted",mId)
             });
 
             Theater.movies = savedMovies;
@@ -149,6 +148,20 @@ const updateMoviesInsideTheater = async (theaterId, movieIds, insert) => {
         throw error;
     }
 }
+
+const findMovieInTheTheater = async (movieId) => {
+    try {
+        // Find all theaters that have this movieId in their movies array
+        const theaters = await theater.find({ movies: movieId });
+        return theaters;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+
+
 const updateTheater = async (id, data) => {
     id = typeof id === 'string' ? id.trim() : id;
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -185,4 +198,7 @@ const updateTheater = async (id, data) => {
     }
 }
 
-module.exports = { createTheater, deleteTheater, fetchTheater, fetchAllTheaters, updateMoviesInsideTheater, updateTheater }
+module.exports = {
+    createTheater, deleteTheater, fetchTheater, fetchAllTheaters, updateMoviesInsideTheater,
+    updateTheater, findMovieInTheTheater
+}
