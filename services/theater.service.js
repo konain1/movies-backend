@@ -154,12 +154,29 @@ const updateMoviesInsideTheater = async (theaterId, movieIds, insert) => {
 }
 
 const findAllMovieInTheTheater = async (theaterId) => {
+    theaterId = typeof theaterId === 'string' ? theaterId.trim() : theaterId;
+    if (!mongoose.Types.ObjectId.isValid(theaterId)) {
+        return {
+            err: "Invalid Theater ID format provided",
+            code: 400
+        };
+    }
+
     try {
-        // Find all theaters that have this movieId in their movies array
-        const movies = await theater.findById(theaterId).populate('movies');
-        return movies;
+        // Find the theater and populate the movies array
+        const theaterData = await theater.findById(theaterId).populate('movies');
+        
+        if (!theaterData) {
+            return {
+                err: "No theater found with the given ID",
+                code: 404
+            };
+        }
+
+        // Return only the populated movies array
+        return theaterData.movies;
     } catch (error) {
-        console.log(error);
+        console.log("Error in findAllMovieInTheTheater: ", error);
         throw error;
     }
 }
