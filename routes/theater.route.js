@@ -8,7 +8,7 @@ const routes = (app) => {
     app.get('/mbp/api/v1/theaters/:id', theaterController.getTheater)
     app.put('/mbp/api/v1/theaters/:id', theaterController.update)
     app.patch('/mbp/api/v1/theaters/:id/movies', validateUpdateMoviesInTheaterRequest, theaterController.updateMovieInTheTheater)
-    app.get('/mbp/api/v1/theaters/movie/:movieId',theaterController.findMovieOnTheater)
+    app.get('/mbp/api/v1/theater/:theaterId',theaterController.findMoviesOnATheater)
 }
 
 module.exports = routes

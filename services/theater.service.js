@@ -153,11 +153,11 @@ const updateMoviesInsideTheater = async (theaterId, movieIds, insert) => {
     }
 }
 
-const findMovieInTheTheater = async (movieId) => {
+const findAllMovieInTheTheater = async (theaterId) => {
     try {
         // Find all theaters that have this movieId in their movies array
-        const theaters = await theater.find({ movies: movieId });
-        return theaters;
+        const movies = await theater.findById(theaterId).populate('movies');
+        return movies;
     } catch (error) {
         console.log(error);
         throw error;
@@ -204,5 +204,5 @@ const updateTheater = async (id, data) => {
 
 module.exports = {
     createTheater, deleteTheater, fetchTheater, fetchAllTheaters, updateMoviesInsideTheater,
-    updateTheater, findMovieInTheTheater
+    updateTheater, findAllMovieInTheTheater
 }
