@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const theater = require('../models/theater.model');
+const Movies  = require('../models/movie.model')
 const { SuccessResponseBody } = require('../utils/responseBody');
 const { response } = require('express');
 
@@ -88,6 +89,9 @@ const fetchAllTheaters = async (data) => {
 
         if(data && data.name){
             query.name = data.name
+        }
+        if (data && data.movieId) {
+            query.movies = data.movieId;
         }
         if(data && data.limit){
             pagination.limit = data.limit
